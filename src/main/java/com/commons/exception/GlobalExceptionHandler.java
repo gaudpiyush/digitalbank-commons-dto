@@ -1,8 +1,5 @@
 package com.commons.exception;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -24,6 +21,11 @@ public class GlobalExceptionHandler {
                 .body(err("CONFLICT", ex.getMessage(), ex.getMessage()));
     }
 
+    @ExceptionHandler(ResourceNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleResourceNotFound(ResourceNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(err("NOT_FOUND", "Resource not found", ex.getMessage()));
+    }
 
     // ---------- builder function ----------
     private ErrorResponse err(String code, String message, String details) {
