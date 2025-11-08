@@ -27,6 +27,24 @@ public class GlobalExceptionHandler {
                 .body(err("NOT_FOUND", "Resource not found", ex.getMessage()));
     }
 
+    @ExceptionHandler(CustomerNotFoundException.class)
+    public ResponseEntity<ErrorResponse> handleCustomerNotFound(CustomerNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                .body(err("CUSTOMER_NOT_FOUND", "The customer ID does not exist", ex.getMessage()));
+    }
+
+    @ExceptionHandler(VersionMismatchException.class)
+    public ResponseEntity<ErrorResponse> handleVersionMismatch(VersionMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.CONFLICT)
+                .body(err("VERSION_MISMATCH", "Stale version or ETag", ex.getMessage()));
+    }
+
+    @ExceptionHandler(PreconditionRequiredException.class)
+    public ResponseEntity<ErrorResponse> handlePreconditionRequired(PreconditionRequiredException ex) {
+        return ResponseEntity.status(HttpStatus.PRECONDITION_REQUIRED)
+                .body(err("HEADER_REQUIRED", "If-Match header required", ex.getMessage()));
+    }
+
     // ---------- builder function ----------
     private ErrorResponse err(String code, String message, String details) {
         return ErrorResponse.builder()
